@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'The Godfather';
+    src: url('./Godfather.woff2') format('woff2'),
+        url('./Godfather.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
