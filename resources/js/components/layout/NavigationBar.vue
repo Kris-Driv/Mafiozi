@@ -1,12 +1,19 @@
 <template>
     <div class="navigation-bar">
         <ul class="navigation-bar__list">
+            
+            <!-- Home Tab -->
             <li class="navigation-bar__item navigation-bar__item--active">
-                <a href="#" class="navigation-bar__link">Home</a>
+                <router-link class="navigation-bar__link" :to="{ name: 'Home' }">Home</router-link>
             </li>
-            <li class="navigation-bar__item">
-                <a href="#" class="navigation-bar__link">Jobs</a>
-            </li>
+            
+            <!-- Jobs Tab -->
+            <router-link :to="{ name: 'Jobs' }">
+                <li class="navigation-bar__item">
+                    <a href="#" class="navigation-bar__link">Jobs</a>
+                </li>
+            </router-link>
+
             <li class="navigation-bar__item">
                 <a href="#" class="navigation-bar__link">Tasks</a>
             </li>
@@ -40,3 +47,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+a {
+    text-decoration: none;
+}
+</style>

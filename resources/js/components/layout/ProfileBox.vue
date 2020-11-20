@@ -1,7 +1,14 @@
 <template>
     <div class="profile-box">
         <div class="profile-box__username">
-            <span :style="computeStyling">{{ username }}</span>
+            <div class="profile-box__username-wrapper">
+                <span :style="computeStyling">{{ username }}</span>
+                <div class="stats-level">{{ level }}</div>
+            </div>
+        </div>
+        <div class="profile-box__money">
+        <span class="symbol">$</span>
+        <span class="value">{{ money }}</span>
         </div>
     </div>
 </template>
@@ -15,12 +22,23 @@ export default {
         },
         computeStyling: function() {
             return "display: " + "normal" + ";";
+        },
+        level: function() {
+            if(this.$store.state.stats.level) {
+                return this.$store.state.stats.level.value || 0;
+            }
+        },
+        money: function() {
+            if(this.$store.state.money) {
+                return this.$store.state.stats.money.value || 0;
+            }
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '../../styles/variables.scss';
 .profile-box {
 
     width: 100%;
@@ -29,11 +47,43 @@ export default {
         text-align: center;
         letter-spacing: 2px;
         font-weight: 500;
-        white-space: nowrap;   
         font-size: 0.8em;  
-        span {
-            border-bottom: 1px solid #fff;
-            padding: 0px 2px 5px 2px;
+    }
+
+    &__username-wrapper {
+        // padding: 0px 2px 5px 2px;
+        white-space: nowrap;
+        display: flex;
+        justify-content: center;
+        flex-flow: column;
+        align-items: center;
+        border-bottom: 1px solid #fff;
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .stats-level {
+        padding: 2px 20px 2px 20px;
+        // border-radius: 10%;
+        border: 1px solid #fff;
+        color: $sidebar-background;
+        background-color: #fff;
+        font-family: 'Josef Sans', 'Nunito', 'Roboto', sans-serif;
+    }
+
+    &__money {
+        width: 90%;
+        border-bottom: 1px solid #fff;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        height: 32px;
+        margin: 0 auto;
+
+        .symbol {
+            float: left;
+        }
+        .value {
+            float: right;
         }
     }
 }

@@ -1,33 +1,21 @@
 <template>
     <div class="game-wrapper">
         <Sidebar />
-        <div id="content" data-simplebar>
-            <NavigationBar />
-            <SettingsButton />
-
-            <!-- Router #TODO -->
-            <HomePage />
-        </div>
-
+        <Content />
         <ChatBox />
+        <!-- Nothing should be placed outside here -->
     </div>
 </template>
 
 <script>
 import Sidebar from '../layout/Sidebar.vue';
-import NavigationBar from '../layout/NavigationBar.vue';
 import ChatBox from '../chat/ChatBox.vue';
-import SettingsButton from '../SettingsButton.vue';
-import HomePage from './pages/HomePage.vue';
+import Content from './Content.vue';
 
 export default {
     name: "Game",
-    data() {
-        // Hold the stats ?
-        return {};
-    },
     components: {
-        Sidebar, NavigationBar, ChatBox, SettingsButton, HomePage
+        Sidebar, ChatBox, Content
     }
 }
 </script>

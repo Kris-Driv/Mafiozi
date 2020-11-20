@@ -24,10 +24,10 @@ import VueCookies from 'vue-cookies';
 Vue.use(VueCookies)
 
 /**
- * Router for Mafiozi SPA (Single Page Application) needs
+ * Router
  */
 import VueRouter from 'vue-router';
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 /**
  * Vuex state managment library
@@ -49,26 +49,40 @@ Vue.mixin({
     }
 });
 
+// Import views
+import HomeView from './views/HomeView.vue';
+import JobsView from './views/JobsView.vue';
+
+const router = new VueRouter({
+    //mode: 'history',
+    routes: [
+        {
+            name: "Home",
+            path: "/",
+            component: HomeView
+        },
+        {
+            name: "Jobs",
+            path: "/jobs",
+            component: JobsView
+        }
+    ],
+    linkActiveClass: "active",
+    linkExactActiveClass: "exact-active",
+});
+
 /**
  * Import the Vuex store
  */
 import store from './store.js';
 
 /**
- * Dynamically import components
- */
-const files = require.context('./', true, /\.vue$/i)
-files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
-
-
-/**
  * Render the application
  */
 import Entry from './Entry.vue';
-import { isString } from 'lodash';
 
 new Vue({
     render: h => h(Entry),
-    store
+    store,
+    router
 }).$mount('#app')

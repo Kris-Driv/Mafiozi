@@ -1,12 +1,17 @@
 <template>
-    <NewsFeed />
+    <div class="home-view">
+        <NewsFeed />
+    </div>
 </template>
 
 <script>
-import NewsFeed from '../../NewsFeed.vue';
+import NewsFeed from '../components/NewsFeed.vue';
 
 export default {
-    name: "HomePage",
+    name: "HomeView",
+    data() {
+        return {test: true}
+    },
     components: {
         NewsFeed
     }

@@ -6,7 +6,7 @@
 
             <div class="sidebar__info">
                 <ProfileBox />
-                <StatsList />
+                <!-- <StatsList /> -->
             </div>
             
             <div class="sidebar__footer">

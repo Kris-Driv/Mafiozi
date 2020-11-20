@@ -24,6 +24,8 @@ export default new Vuex.Store({
         /* Inform the user of authentication status */
         auth_feedback: "Enter your credentials to login or create new account",
 
+        /* Player stats, such as money, energy, health etc */
+        stats: {}
 
     },
     mutations: {
@@ -42,6 +44,8 @@ export default new Vuex.Store({
          * Cleans raw inputs from forms
          * Saves token using cookies and puts it inside axios headers for
          * future requests
+         * 
+         * see dropToken for the opposite action
          */
         updateToken(state, payload) {
             // Update token in the state
@@ -79,8 +83,24 @@ export default new Vuex.Store({
 		},
 		
 		updateUserInformation(state, user) {
-			state.user = user;
-		}
+            state.user = user;
+            
+            // If we acquire stats from the params, then parse them
+            // into more easily usable parts
+            let stats = user.stats;
+            if(!stats) return;
+
+            this.commit('updateStats', Mixin.parseStats(stats));
+            // I really dislike when I have to spam same word
+            // over and over again, but oh well
+        },
+        
+        /**
+         * Set parsed stats object
+         */
+        updateStats(state, stats) {
+            state.stats = stats;
+        }
     },
     actions: {
         /**
@@ -133,7 +153,7 @@ export default new Vuex.Store({
                                 message = "Invalid email address provided";
                                 break;
                             case 401:
-                                message = "Invalid password and/or email";
+                                message = "Incorrect password and/or email";
                                 break;
                             default:
                                 message = "Unknown error occured";

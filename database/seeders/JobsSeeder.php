@@ -13,7 +13,7 @@ class JobsSeeder extends Seeder
     public function run()
     {
         DB::table('jobs')->insert([
-            "name" => "Aplaupīšana",
+            "name" => "Robbery",
             "energy" => 3,
             "mafia" => 0,
             "level" => 0,
@@ -22,7 +22,7 @@ class JobsSeeder extends Seeder
             "xp" => 3
         ]);
         DB::table('jobs')->insert([
-            "name" => "Zādzība ar ielaušanos",
+            "name" => "Theft with invasion",
             "energy" => 5,
             "mafia" => 0,
             "level" => 2,
