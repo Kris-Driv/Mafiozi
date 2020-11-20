@@ -115,10 +115,13 @@ export default new Vuex.Store({
 							throw {response: { status: 401 }}
 						}
 
+                        // Update state with basic user data
 						this.commit('updateUserInformation', response.data.user);
                         this.commit('updateToken', {
                             access_token: token
-						});
+                        });
+                        // Get more info about the user
+                        this.dispatch('retrieveUserData');
                     }
                 })
                 .catch(err => {
