@@ -4,6 +4,7 @@
             class="auth-form__input-group__label" 
             :for="name"
             :class="computeFocus"
+            :ref="'custom-input-label-' + name"
         >
             {{ label }}
         </label>

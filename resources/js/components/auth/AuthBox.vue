@@ -7,9 +7,9 @@
                 </div>
             </header>
             <div class="form-wrapper">
-                <LoginForm      v-if="type === 'login'" />
-                <RegisterForm   v-else-if="type === 'register'" />
-                <ForgotForm     v-else-if="type === 'forgot'" />
+                <LoginForm      v-if="type === 'login'" @show-register="type = 'register'" @show-forgot="type = 'forgot'" />
+                <RegisterForm   v-else-if="type === 'register'" @show-login="type = 'login'" @show-forgot="type = 'forgot'"/>
+                <ForgotForm     v-else-if="type === 'forgot'" @show-login="type = 'login'" @show-register="type = 'register'"/>
             </div>
         </div>
     </div>

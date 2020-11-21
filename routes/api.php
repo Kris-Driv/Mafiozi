@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JobsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,9 @@ use App\Http\Controllers\AuthController;
 |
 */
 
+/**
+ * Authentication group including User data retrieval and validation
+ */
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
@@ -27,4 +31,14 @@ Route::group([
     Route::post('/checkToken', [AuthController::class, 'checkToken']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
     Route::get('/me', [AuthController::class, 'me']);
+});
+
+/**
+ * Jobs group
+ */
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'job'
+], function($router) {
+    Route::get('/all', [JobsController::class, 'all']);
 });

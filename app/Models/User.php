@@ -47,7 +47,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * This is how the new User should be registered
-     * Pass necessary values, name, username, email and password through
+     * Pass necessary values: username, email and password through
      * $data parameter. These values will not be validated
      * 
      * @param array $data
@@ -55,7 +55,6 @@ class User extends Authenticatable implements JWTSubject
     public static function registerNew(array $data): ?User
     {
         $user = User::create([
-            'name' => $data['name'],
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => bcrypt($data['password'])

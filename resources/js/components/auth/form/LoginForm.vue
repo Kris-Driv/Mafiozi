@@ -6,7 +6,7 @@
             <input class="btn" type="submit" value="Sign In">
         </form>
         <div class="auth-options">
-            <button class="btn btn--secondary">Register</button>
+            <button class="btn btn--secondary" @click="$emit('show-register')" >Register</button>
         </div>
     </div>
 </template>
@@ -23,6 +23,11 @@ export default {
         attemptLogin() {
             this.$store.dispatch('retrieveToken')
         }
+    },
+    mounted() {
+        this.$store.commit('updateAuthenticationFeedback', {
+            message: "Enter your credentials to login or create new account"
+        });
     }
 }
 </script>

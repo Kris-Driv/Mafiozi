@@ -18,3 +18,12 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+#content {
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+</style>

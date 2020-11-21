@@ -44,10 +44,9 @@ import Mixin from './mixin.js';
  * Declare helper functions
  */
 Vue.mixin({
-    methods: {
-        ...Mixin
-    }
+    ...Mixin
 });
+window.Mixin = Mixin;
 
 // Import views
 import HomeView from './views/HomeView.vue';

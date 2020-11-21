@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Job;
 use Illuminate\Http\Request;
-use App\Job;
+use Illuminate\Http\JsonResponse;
 
 class JobsController extends Controller
 {
+
+    function __construct()
+    {
+        $this->middleware(['api:auth'], ['except' => ['all']]);
+    }
+
+    public function all(Request $request) : JsonResponse {
+        return response()->json(Job::all()->toArray());
+    }
     
     public function index() 
     {

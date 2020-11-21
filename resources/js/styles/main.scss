@@ -54,3 +54,33 @@ body {
         border: 3px solid $accent-color;
     }
 }
+
+/** For Muting stuff **/
+.muted {
+    position: relative;
+}
+.muted::before {
+    content: "";
+    display: inline-block;
+    z-index: 1000;
+    transition: background-color 1000ms;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  
+    background-color: rgba(#fff, 0.15);
+  
+    animation: fade-in;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+  }
+  .muted:hover:before {
+    cursor: wait;
+  }
+  
+  @keyframes fade-in {
+    0%    { background-color: transparent; }
+    100%  { background-color: rgba(#fff, 0.15); }
+  }

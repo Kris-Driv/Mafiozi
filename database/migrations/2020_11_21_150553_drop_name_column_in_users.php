@@ -4,9 +4,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddNameColumnUsers extends Migration
+class DropNameColumnInUsers extends Migration
 {
-    
     /**
      * Run the migrations.
      *
@@ -15,7 +14,7 @@ class AddNameColumnUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('name', 32);
+            $table->dropColumn('name');
         });
     }
 
@@ -27,8 +26,7 @@ class AddNameColumnUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('name');
+            $table->string('name', 100);
         });
     }
-
 }

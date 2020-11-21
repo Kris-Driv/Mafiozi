@@ -20,12 +20,18 @@ export default new Vuex.Store({
         /* Store the inputs for login process */
         input_email: "",
         input_password: "",
+        /* Store the inputs for register process */
+        input_username: "",
+        input_repeat_password: "",
 
         /* Inform the user of authentication status */
-        auth_feedback: "Enter your credentials to login or create new account",
+        auth_feedback: "",
 
         /* Player stats, such as money, energy, health etc */
-        stats: {}
+        stats: {},
+
+        /* Job list */
+        jobs: null
 
     },
     mutations: {
@@ -90,7 +96,7 @@ export default new Vuex.Store({
             let stats = user.stats;
             if(!stats) return;
 
-            this.commit('updateStats', Mixin.parseStats(stats));
+            this.commit('updateStats', Mixin.methods.parseStats(stats));
             // I really dislike when I have to spam same word
             // over and over again, but oh well
         },
@@ -100,6 +106,13 @@ export default new Vuex.Store({
          */
         updateStats(state, stats) {
             state.stats = stats;
+        },
+
+        /**
+         * Set available jobs
+         */
+        updateJobList(state, jobs) {
+            state.jobs = jobs;
         }
     },
     actions: {
@@ -129,7 +142,7 @@ export default new Vuex.Store({
 						const token = response.data.access_token;
 						
 						// If invalid or no token came back
-						if(!Mixin.tokenExists(token)) {
+						if(!Mixin.methods.tokenExists(token)) {
 							// return Unauthorized, which will inform user
 							// that the credentials are incorrect
 							throw {response: { status: 401 }}
@@ -252,7 +265,7 @@ export default new Vuex.Store({
 		 */
 		validateToken() {
 			// Don't proceed if previous session doesn't exist
-			if(!Mixin.tokenExists(this.state.access_token)) {
+			if(!Mixin.methods.tokenExists(this.state.access_token)) {
 				return;
 			}
 
@@ -267,8 +280,7 @@ export default new Vuex.Store({
 				this.dispatch('dropToken');
 				console.log("Dropped previous session due to network or internal errors");
 			});
-
-		}
+        },
 
 	},
 

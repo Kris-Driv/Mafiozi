@@ -1,10 +1,11 @@
 <?php
+namespace Database\Seeders;
+
+use App\Models\Store;
+use App\Models\Inventory;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-
-use App\Store;
-use App\Inventory;
 
 class StoreInventorySeeder extends Seeder
 {

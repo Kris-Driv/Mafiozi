@@ -1,9 +1,10 @@
 <?php
+namespace Database\Seeders;
 
+use App\Models\Inventory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-use App\Inventory;
+use Illuminate\Support\Facades\DB;
 
 class WeaponSeeder extends Seeder
 {

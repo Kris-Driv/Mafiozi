@@ -18,7 +18,7 @@ export default {
     name: "ProfileBox",
     computed: {
         username: function() {
-            return this.$store.state.user.name;
+            return this.$store.state.user.username;
         },
         computeStyling: function() {
             return "display: " + "normal" + ";";
@@ -29,7 +29,7 @@ export default {
             }
         },
         money: function() {
-            if(this.$store.state.money) {
+            if(this.$store.state.stats.money) {
                 return this.$store.state.stats.money.value || 0;
             }
         }

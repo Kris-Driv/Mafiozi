@@ -4,15 +4,13 @@
             
             <!-- Home Tab -->
             <li class="navigation-bar__item navigation-bar__item--active">
-                <router-link class="navigation-bar__link" :to="{ name: 'Home' }">Home</router-link>
+                <router-link class="navigation-bar__link" :to="{ name: 'Home' }" exact>Home</router-link>
             </li>
             
-            <!-- Jobs Tab -->
-            <router-link :to="{ name: 'Jobs' }">
-                <li class="navigation-bar__item">
-                    <a href="#" class="navigation-bar__link">Jobs</a>
-                </li>
-            </router-link>
+            <!-- Home Tab -->
+            <li class="navigation-bar__item navigation-bar__item--active">
+                <router-link class="navigation-bar__link" :to="{ name: 'Jobs' }">Jobs</router-link>
+            </li>
 
             <li class="navigation-bar__item">
                 <a href="#" class="navigation-bar__link">Tasks</a>
