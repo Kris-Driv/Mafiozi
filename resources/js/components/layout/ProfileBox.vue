@@ -7,8 +7,8 @@
             </div>
         </div>
         <div class="profile-box__money">
-        <span class="symbol">$</span>
-        <span class="value">{{ money }}</span>
+            <span class="symbol stat-indicator"><i class="fa fa-usd" aria-hidden="true"></i></span>
+            <span class="value">{{ money }}</span>
         </div>
     </div>
 </template>

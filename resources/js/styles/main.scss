@@ -79,8 +79,41 @@ body {
   .muted:hover:before {
     cursor: wait;
   }
+
+.soft_mute {
+
+// display: inline-block;
+// width: 80px;
+// height: 80px;
+      
+    &::after {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+
+        content: " ";
+        display: block;
+        width: 14px;
+        height: 14px;
+        margin: 8px;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        border-color: #fff transparent #fff transparent;
+        animation: rotate-spinner 1s infinite cubic-bezier(0.78, 0.66, 0.2, 0.62);;
+    }
+
+    @keyframes rotate-spinner {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }          
+    }
+
+}
   
-  @keyframes fade-in {
+@keyframes fade-in {
     0%    { background-color: transparent; }
     100%  { background-color: rgba(#fff, 0.15); }
-  }
+}

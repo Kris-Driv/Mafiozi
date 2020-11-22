@@ -6,9 +6,17 @@ import Mixin from './mixin.js';
 Vue.use(Vuex);
 Vue.use(VueCookies);
 
+const DEFAULT_TRANSITION = "slide";
+
 export default new Vuex.Store({
     state: {
-        /* Is application inaccessable (loading) */
+        /* Is application inaccessable (loading) 
+         *
+         * Each component may now implement this feature itself by adding :class="{muted}" to root element
+         * And use following methods: mute() & unmute()
+         * 
+         * This, however, will disable entire application, so this stays as global switch
+         */
         mute: false,
 
         /* Access token will be retrieved from cookie or using API */
@@ -20,7 +28,7 @@ export default new Vuex.Store({
         /* Store the inputs for login process */
         input_email: "",
         input_password: "",
-        /* Store the inputs for register process */
+        /* Store the inputs for register process, inputs above are shared */
         input_username: "",
         input_repeat_password: "",
 
@@ -31,7 +39,10 @@ export default new Vuex.Store({
         stats: {},
 
         /* Job list */
-        jobs: null
+        jobs: null,
+
+        /* View transition effect */
+        transitionName: DEFAULT_TRANSITION,
 
     },
     mutations: {

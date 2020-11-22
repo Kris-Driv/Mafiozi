@@ -1,25 +1,48 @@
 import Axios from "axios";
 import store from './store.js';
 
+const LOREM = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem nesciunt laborum possimus asperiores eaque nemo saepe sequi maxime illum totam. Voluptatum eum consequuntur facere impedit cumque quae veniam labore qui."
+
 export default {
 
     data() {
         return {
-            muted: false
+            muted: false,
+            soft_mute: false
         }
     },
 
     methods: {
 
         /**
-         * Muting logic
+         * Return some dummy text
+         * 
+         * @param Number wordLength 
          */
-        mute() {
-            this.muted = true;
+        lorem_ipsum: function(wordLength) {
+            // TODO, not that important
+            return LOREM;
         },
 
-        unmute() {
-            this.muted = false;
+        /**
+         * Muting logic
+         */
+        mute(soft = false, both = false) {
+            if(soft) {
+                this.soft_mute = true;
+
+                if(!both) return;
+            }
+            this.mute = true;
+        },
+
+        unmute(soft = false, both = false) {
+            if(soft) {
+                this.soft_mute = false;
+
+                if(!both) return;
+            }
+            this.mute = false;
         },
 
         /**
@@ -76,7 +99,7 @@ export default {
             });
 
             return stats;
-        }
+        },
 
     }
 

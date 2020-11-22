@@ -27,9 +27,12 @@
             <li class="navigation-bar__item">
                 <a href="#" class="navigation-bar__link">Mafiozi</a>
             </li>
-            <li class="navigation-bar__item">
-                <a href="#" class="navigation-bar__link">Top</a>
+            
+            <!-- Top Tab -->
+            <li class="navigation-bar__item navigation-bar__item--active">
+                <router-link class="navigation-bar__link" :to="{ name: 'Top' }">Top</router-link>
             </li>
+
         </ul>
     </div>
 </template>

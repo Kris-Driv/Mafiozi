@@ -6,8 +6,12 @@
 
 <script>
 import NewsFeed from '../components/NewsFeed.vue';
+import ViewMixin from './ViewMixin.vue';
 
 export default {
+    mixins: [ViewMixin],
+
+
     name: "HomeView",
     data() {
         return {test: true}

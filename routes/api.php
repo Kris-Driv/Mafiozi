@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JobsController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,4 +42,15 @@ Route::group([
     'prefix' => 'job'
 ], function($router) {
     Route::get('/all', [JobsController::class, 'all']);
+    Route::post('/do-job', [JobsController::class, 'doJob']);
+});
+
+/**
+ * User group
+ */
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'user'
+], function($router) {
+    Route::get('/top', [UserController::class, 'top']);
 });

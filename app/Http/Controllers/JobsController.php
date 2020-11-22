@@ -11,7 +11,7 @@ class JobsController extends Controller
 
     function __construct()
     {
-        $this->middleware(['api:auth'], ['except' => ['all']]);
+        $this->middleware(['auth:api'], ['except' => ['all']]);
     }
 
     public function all(Request $request) : JsonResponse {
@@ -23,31 +23,49 @@ class JobsController extends Controller
         return view('jobs')->with('jobs', Job::all());
     }
 
-    public function doJob() {
-        $id = request()->post()["id"] ?? false;
+    public function doJob(Request $request) : JsonResponse {
+        $id = $request->job_id ?? false;
+        
         if($id === false || !($job = Job::find($id))) {
-            return ["message" => "Notikusi kļūda: šis darbs neeksistē", "error" => true];
+            return response()->json([
+                "message" => "Job by id '$id' was not found",
+                "success" => false]
+            , 200);
         }
         # BIG TODO
         // Send appropriate error message
-        if(!\Auth::user()->canDoJob($job)) {
-            if($job->energy > \Auth::user()->getStat('energy')->value) {
-                return ["message" => "Jums nepietiek enerģijas", "error" => true];
+        if(!auth()->user()->canDoJob($job)) {
+            if($job->energy > auth()->user()->getStat('energy')->value) {
+                return response()->json([
+                    "message" => "User has insufficient energy level",
+                    "success" => false
+                ]);
             }
-            return ["message" => "Nav izpildītas prasības", "error" => true];
+            return response()->json([
+                "message" => "Requirements for this job was not met",
+                "success" => true
+                ]);
         }
         // Execute job
         $m = mt_rand($job->rm_min, $job->rm_max);
 
-        \Auth::user()->getStat('money')->value += $m;
-        \Auth::user()->getStat('energy')->value -= $job->energy;
-        \Auth::user()->getStat('xp')->value += $job->xp;
-        \Auth::user()->push();
+        auth()->user()->getStat('money')->value += $m;
+        auth()->user()->getStat('energy')->value -= $job->energy;
+        auth()->user()->getStat('xp')->value += $job->xp;
+        auth()->user()->push();
 
 
-        return [
-            "message" => "Darbs izpildīts (+\${$m})"
-        ];
+        return response()->json([
+            "message" => "Job accomplished",
+            "success" => true,
+            "rewards" => [
+                "money" => $m,
+                "xp"    => $job->xp,
+            ],
+            "spent"   => [
+                "energy" => $job->energy
+            ]
+        ]);
     }
 
 }

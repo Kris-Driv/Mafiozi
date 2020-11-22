@@ -3,7 +3,12 @@
         <NavigationBar />
         <SettingsButton />
 
-        <router-view></router-view>
+        <transition
+            :name="$store.state.transitionName"
+            mode="out-in"
+        >
+            <router-view />
+        </transition>
     </div>
 </template>
 

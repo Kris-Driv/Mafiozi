@@ -6,10 +6,11 @@
 
             <div class="sidebar__info">
                 <ProfileBox />
-                <!-- <StatsList /> -->
+                <StatsList />
             </div>
             
             <div class="sidebar__footer">
+                <SidebarFooter />
                 <span>2020 Mafiozi ©</span>
                 <br>
                 <span>All rights reserved</span>
@@ -24,11 +25,13 @@
 import '../../styles/layout/sidebar.scss';
 import Logo from '../Logo.vue';
 import ProfileBox from './ProfileBox.vue';
+import StatsList from './StatsList.vue';
+import SidebarFooter from './SidebarFooter.vue';
 
 export default {
     name: "Sidebar",
     components: {
-        Logo, ProfileBox
+        Logo, ProfileBox, StatsList, SidebarFooter
     },
     methods: {},
     data() {

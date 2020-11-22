@@ -1,6 +1,6 @@
 <template>
     <div class="jobs-item" :id="'job-' + id">
-
+        
     </div>
 </template>
 

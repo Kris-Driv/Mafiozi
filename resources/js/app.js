@@ -18,6 +18,12 @@ import 'vue-simplebar/dist/vue-simplebar.min.css';
 Vue.use(VueSimplebar);
 
 /**
+ * Import Carousel component
+ */
+import VueCarousel from '@chenfengyuan/vue-carousel';
+Vue.use(VueCarousel);
+
+/**
  * Importing cookies library to handle refresh, animations and authentication
  */
 import VueCookies from 'vue-cookies';
@@ -51,6 +57,7 @@ window.Mixin = Mixin;
 // Import views
 import HomeView from './views/HomeView.vue';
 import JobsView from './views/JobsView.vue';
+import TopView  from './views/TopView.vue'; 
 
 const router = new VueRouter({
     //mode: 'history',
@@ -58,12 +65,26 @@ const router = new VueRouter({
         {
             name: "Home",
             path: "/",
-            component: HomeView
+            component: HomeView,
+            meta: {
+                transitionName: 'slide'
+            }
         },
         {
             name: "Jobs",
             path: "/jobs",
-            component: JobsView
+            component: JobsView,
+            meta: {
+                transitionName: 'slide'
+            }
+        },
+        {
+            name: "Top",
+            path: "/top",
+            component: TopView,
+            meta: {
+                transitionName: 'slide'
+            }
         }
     ],
     linkActiveClass: "active",

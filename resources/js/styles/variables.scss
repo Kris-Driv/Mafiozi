@@ -1,7 +1,7 @@
 $bg-color:      #1B1B1B;
-$fg-color:      #353b48;
+$fg-color:      #282828;
 $txt-color:     #fff;
-$border-color:  #718093;
+$border-color:  #2a394d;
 $success-color: #4cd137;
 $error-color:   #eb2f06;
 $warning-color: #f9ca24;
@@ -11,5 +11,5 @@ $txt-grayed:    #a1a1cf;
 // Misc
 $autofill-background: rgba($accent-color, 0.1);
 
-$sidebar-background: #282828;
-$sidebar-width: 120px;
+$sidebar-background: $fg-color;
+$sidebar-width: 140px;
