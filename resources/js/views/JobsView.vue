@@ -29,8 +29,14 @@ export default {
     },
     watch: {
         jobs: function(newValue, oldValue) {
+            this.createElements();
+        }
+    },
+    methods: {
+        createElements() {
+            console.log(this.jobs);
             let list = [];
-            newValue.forEach((job, index) => {
+            this.jobs.forEach((job, index) => {
                 list.push({
                     id: index,
 
@@ -104,6 +110,8 @@ export default {
             }).finally(_ => {
                 this.unmute();
             });
+        } else {
+            this.createElements();
         }
     }
 }

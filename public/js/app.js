@@ -3872,8 +3872,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     jobs: function jobs(newValue, oldValue) {
+      this.createElements();
+    }
+  },
+  methods: {
+    createElements: function createElements() {
+      console.log(this.jobs);
       var list = [];
-      newValue.forEach(function (job, index) {
+      this.jobs.forEach(function (job, index) {
         list.push({
           id: index,
           content: function content(createElement, _content) {
@@ -3925,6 +3931,8 @@ __webpack_require__.r(__webpack_exports__);
       })["finally"](function (_) {
         _this.unmute();
       });
+    } else {
+      this.createElements();
     }
   }
 });
