@@ -1,5 +1,7 @@
 <template>
   <div :class="{muted: (muted || global_mute)}" class="wrapper" id="app">
+	
+
     <AuthBox v-if="authorized() === false" />
     <Game v-else />
   </div>

@@ -29,8 +29,8 @@ class JobsController extends Controller
         if($id === false || !($job = Job::find($id))) {
             return response()->json([
                 "message" => "Job by id '$id' was not found",
-                "success" => false]
-            , 200);
+                "success" => false
+                ], 200);
         }
         # BIG TODO
         // Send appropriate error message
@@ -43,7 +43,7 @@ class JobsController extends Controller
             }
             return response()->json([
                 "message" => "Requirements for this job was not met",
-                "success" => true
+                "success" => false
                 ]);
         }
         // Execute job

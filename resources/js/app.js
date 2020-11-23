@@ -11,6 +11,19 @@ window.Vue = require('vue');
 Vue.config.productionTip = false
 
 /**
+ * Little cool library for prompt messages
+ */
+import VueMessage from './libs/vue-message/src/lib/index.js';
+Vue.use(VueMessage, {
+    styles: {
+        error:      'background: rgba(192,57,43, 0.85);',
+        warning:    'background: rgba(211,84,0, 0.85);',
+        info:       'background: rgba(41,128,185, 0.85);',
+        success:    'background: rgba(39,174,96, 0.85);',
+    }
+});
+
+/**
  * Importing Simplebar library for nice scrollbars
  */
 import VueSimplebar from 'vue-simplebar';

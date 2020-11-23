@@ -4,19 +4,19 @@
             <li class="progress-list__item">
                 <div class="health">
                     <span class="symbol"><i class="fa fa-heart" aria-hidden="true"></i></span>
-                    <span class="value">{{ this.$store.state.stats.health.value || '...' }}</span>
+                    <span class="value">{{ health }}</span>
                 </div>
             </li>
             <li class="progress-list__item">
                 <div class="energy">
                     <span class="symbol"><i class="fa fa-bolt" aria-hidden="true"></i></span>
-                    <span class="value">{{ this.$store.state.stats.energy.value || '...' }}</span>
+                    <span class="value">{{ energy }}</span>
                 </div>
             </li> 
             <li class="progress-list__item">
                 <div class="xp">
                     <span class="symbol"><i class="fa fa-certificate" aria-hidden="true"></i></span>
-                    <span class="value">{{ this.$store.state.stats.xp.value }}</span>
+                    <span class="value">{{ xp }}</span>
                 </div>
             </li> 
         </ul>
@@ -31,6 +31,26 @@ export default {
     components: {
         ProgressCircle
     },
+    computed: {
+        health() {
+            if(this.$store.state.stats.health) {
+                return this.$store.state.stats.health.value;
+            }
+            return '...';
+        },
+        energy() {
+            if(this.$store.state.stats.energy) {
+                return this.$store.state.stats.energy.value;
+            }
+            return '...';
+        },
+        xp() {
+            if(this.$store.state.stats.xp) {
+                return this.$store.state.stats.xp.value;
+            }
+            return '...';
+        },
+    }
 }
 </script>
 

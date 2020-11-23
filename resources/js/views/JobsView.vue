@@ -6,6 +6,7 @@
 
 <script>
 import ViewMixin from './ViewMixin.vue';
+import Job from '../components/Job.vue';
 
 export default {
     mixins: [ViewMixin],
@@ -16,6 +17,9 @@ export default {
         return {
             data: []
         }
+    },
+    components: {
+        Job
     },
     computed: {
         jobs: {
@@ -33,64 +37,23 @@ export default {
         }
     },
     methods: {
+        doJob(jobId) {
+            console.log(jobId);
+        },
         createElements() {
-            console.log(this.jobs);
+            if(!(this.jobs && this.jobs.forEach)) return;
+
             let list = [];
             this.jobs.forEach((job, index) => {
                 list.push({
                     id: index,
 
                     content(createElement, content) {
-                        return createElement('div', {
-                            class: `job-item job-${job.name}`,
-                        }, [
-                            createElement('h3', {
-                                class: "job-item__name",
-                            }, [
-                                `${job.name}`
-                            ]),
-                            createElement('img', {
-                                class: "job-item__image",
-                                attrs: {
-                                    src: "/img/job_general.png",
-                                    alt: "job's illustration"
-                                }
-                            }),
-                            createElement('p', {
-                                class: "job-item__description",
-                            }, [`${job.description || this.lorem_ipsum(50)}`]),
-                            createElement('div', {
-                                class: "job-item__wrapper"
-                            }, [
-                                createElement('div', {
-                                    class: "job-item__left job-item__info"
-                                }, [
-                                    createElement('span', {
-                                        class: "job-info rewards"
-                                    }, [
-                                        `Rewards: \$${job.rm_min} - \$${job.rm_max} and ${job.xp} XP`,
-                                    ]),
-                                    createElement('span', {
-                                        class: "job-info cost-energy"
-                                    }, [
-                                        `Energy Cost: ${job.energy}`
-                                    ]),
-                                    createElement('span', {
-                                        class: "job-info requirements-list"
-                                    }, [
-                                        `Requirements: none`, // TODO add requirements
-                                    ]),
-                                ]),
-                                createElement('div', {
-                                    class: "job-item__right job-item__actions"
-                                }, [
-                                    createElement('button', {
-                                        class: "job-item__button btn",
-                                        // Add event listener onclick
-                                    }, ['Work'])  
-                                ])
-                            ]),
-                        ]);
+                        return createElement(Job, {
+                            props: {
+                                job
+                            }
+                        });
                     },
                 });  
             });
@@ -100,15 +63,31 @@ export default {
     },
     created() {
         if(this.jobs === null) {
-            this.mute();
+            this.mute(true);
+            
+            /* Load cached job list, and load fresh data in background */
+            try {
+                let savedJobs = this.$cookies.get('mafiozi.jobs');
+                if(savedJobs) {
+                    this.jobs = JSON.parse(savedJobs);
+                }
+            } catch (error) {
+                // Failed to load cached list, lets delete the saved data
+                // so we have the opportunity to save it properly, or at least try to
+                this.$cookies.remove('mafiozi.jobs');
+                console.log("Cached job list was discarded, due to being invalid");
+            } 
+
+            console.log(this.jobs);
 
             axios.get('api/job/all').then(response => {
                 this.jobs = response.data;
-                console.log(this.jobs);
+
+                this.$cookies.set('mafiozi.jobs', JSON.stringify(this.jobs));
             }).catch(err => {
                 console.log("Error while retreiving job list: ", err);
             }).finally(_ => {
-                this.unmute();
+                this.unmute(true);
             });
         } else {
             this.createElements();
