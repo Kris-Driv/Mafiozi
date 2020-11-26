@@ -1,7 +1,5 @@
 <template>
   <div :class="{muted: (muted || global_mute)}" class="wrapper" id="app">
-	
-
     <AuthBox v-if="authorized() === false" />
     <Game v-else />
   </div>
@@ -24,11 +22,49 @@ export default {
   computed: {
     global_mute() {
       return this.$store.state.mute;
-    }
+	},
+	stats() {
+		return this.$store.state.stats;
+	}
+  },
+  watch: {
+	  stats: {
+		  deep: true,
+
+		  handler() {
+			//this.$store.dispatch('retrieveUserData');
+		  }
+	  }
   },
   created() {
     // Mute the application, user should not be able to interact
-    this.mute();
+	this.mute();
+	
+	axios.interceptors.response.use(response => response, error => {
+		// We will handle this case
+		if(error.response.status === 401) {
+			// Only if user was authorized before
+			if(this.authorized()) {
+				this.$store.dispatch('dropToken', true);
+
+				this.$msg({
+					text: "Authentication token expired, please sign in again", 
+					style: "info",
+					duration: 7000
+				});
+			} else {
+				this.$msg({
+					text: "You're not authorized for this action", 
+					style: "error",
+					duration: 7000
+				});
+			}
+
+
+		} else {
+			Promise.reject(error);
+		}
+	});
 
     (new Promise((resolve, reject) => {
 		// Load and validate saved token

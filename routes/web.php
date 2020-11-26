@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\MessageSent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,4 +18,8 @@ Auth::routes();
 
 Route::get('/', function () {
     return view('index');
+});
+
+Route::get('/broadcast', function () {
+    broadcast(new MessageSent(auth()->user(), "This is a test message!"));
 });

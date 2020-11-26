@@ -94,6 +94,13 @@ class User extends Authenticatable implements JWTSubject
         return $stat;
     }
 
+    public function updateValues() : void {
+        foreach(Stat::DEFAULTS as $name => $value) {
+            $this->getStat($name);
+        }
+        $this->updateMaxXP();
+    }
+
     /**
      * Returns money Stat value
      */
@@ -224,8 +231,23 @@ class User extends Authenticatable implements JWTSubject
 
     public function trigger(string $event): bool
     {
-        echo "Player level up";
+        switch($event) {
+            case "level-up": 
+                $this->updateMaxXP();
+                return true;
+            break;
+            default:
+                throw new \InvalidArgumentException("unhandled event '$event' was triggered");
+                break;
+        }
+        
         return true;
+    }
+
+    public function updateMaxXP() {
+        $xp = $this->getStat('xp');
+        $xp->max = $this->getXPToNextLevel();
+        $xp->save();
     }
 
     public function addXP(int $xp): void

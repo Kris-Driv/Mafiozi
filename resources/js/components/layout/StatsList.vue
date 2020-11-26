@@ -1,83 +1,62 @@
 <template>
-    <div class="stats-list">
-        <ul class="progress-list">
-            <li class="progress-list__item">
-                <div class="health">
-                    <span class="symbol"><i class="fa fa-heart" aria-hidden="true"></i></span>
-                    <span class="value">{{ health }}</span>
-                </div>
+    <div>
+        <ul v-for="stat in stats" :key="stat.type">
+            <li v-if="stat.type !== 'level'">
+                <StatValue 
+                    :name="stat.type" 
+                    :value="stat.value" 
+                    :max="stat.max" 
+                    :countdown="stat.local_next" 
+                />
             </li>
-            <li class="progress-list__item">
-                <div class="energy">
-                    <span class="symbol"><i class="fa fa-bolt" aria-hidden="true"></i></span>
-                    <span class="value">{{ energy }}</span>
-                </div>
-            </li> 
-            <li class="progress-list__item">
-                <div class="xp">
-                    <span class="symbol"><i class="fa fa-certificate" aria-hidden="true"></i></span>
-                    <span class="value">{{ xp }}</span>
-                </div>
-            </li> 
         </ul>
     </div>
 </template>
 
 <script>
-import ProgressCircle from '../ProgressCircle.vue';
+// Not used currently, will update only before value changes
+const SYNCHRONIZE_FREQUENCY = 5;
+
+import StatValue from '../StatValue.vue';
 
 export default {
-    name: "StatsList",
-    components: {
-        ProgressCircle
-    },
     computed: {
-        health() {
-            if(this.$store.state.stats.health) {
-                return this.$store.state.stats.health.value;
+        stats() {
+            return this.$store.state.stats;
+        }
+    },
+    components: { StatValue },
+    methods: {
+        update() {
+            for(let key in this.stats) {
+                let stat = this.stats[key];
+
+                // Some stats are not necessary to update
+                //if(key === "energy") console.log({message: "Conditions:", intervalBiggerThanNull: (stat.interval <= 0), valueCapped: (stat.value >= stat.max), timeRanOut: (stat.local_next <= 0)});
+                //console.log({max: stat.max, value:stat.value});
+                if(stat.interval <= 0) continue;
+                if(stat.value >= stat.max) continue;
+                if(stat.local_next <= 0) continue;
+
+                stat.local_next -= 1;
+                
+                // Due to latency, let's start request second earlier.
+                if(stat.local_next === 0) {
+                    this.$store.dispatch('retrieveUserData');
+                }
+
+                if(stat.local_next <= 0) {
+                    stat.value = parseInt(stat.value) + parseInt(stat.growBy);
+                    stat.local_next = parseInt(stat.interval);
+                }
             }
-            return '...';
-        },
-        energy() {
-            if(this.$store.state.stats.energy) {
-                return this.$store.state.stats.energy.value;
-            }
-            return '...';
-        },
-        xp() {
-            if(this.$store.state.stats.xp) {
-                return this.$store.state.stats.xp.value;
-            }
-            return '...';
-        },
+
+            setTimeout(this.update, 1000);
+        }
+    },
+    created() {
+        // Initiate the loop ...
+        this.update(); // Will keep looping!
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.stats-list {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-flow: column;
-    justify-content: flex-start;
-    align-items: center;
-}
-.value {
-    float: right;
-}
-.symbol {
-    float: left;
-}
-.progress-list {
-    width: 90%;
-
-    &__item {
-        list-style: none;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        min-height: 30px;
-        border-bottom: 1px solid #fff;
-    }
-}
-</style>

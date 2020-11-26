@@ -7,7 +7,7 @@
             </a>
         </div>
         <div class="chat-message__username">
-            <span class="username">{{ getUsername(userId) }}</span>
+            <span class="username">{{ username }}</span>
         </div>
         <div class="chat-message__content">
             <span class="message">{{ content }}</span>
@@ -18,22 +18,19 @@
 <script>
 export default {
     name: "ChatMessage",
-    props: ["userId", "content", "id", "date"],
+    props: ["user", "content", "id", "date"],
     data() {
         return {
             own: false
         }
     },
-    methods: {
-        getUsername(id) {
-            if(id === "lol") {
-                return "Chris";
-            }
-            return "Unknown"; // TODO
+    computed: {
+        username() {
+            return this.user.username;
         }
     },
     created() {
-        this.own = this.userId === "1";
+        this.own = this.user.id === this.$store.state.user.id;
     }
 }
 </script>

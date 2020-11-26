@@ -22,6 +22,9 @@ export default new Vuex.Store({
         /* Access token will be retrieved from cookie or using API */
         access_token: null,
 
+        /* Validating token */
+        validating_token: false,
+
 		/* Basic information about the user */
 		user: {},
 
@@ -37,6 +40,9 @@ export default new Vuex.Store({
 
         /* Player stats, such as money, energy, health etc */
         stats: {},
+
+        /* Lock state, when synchronizing player data */
+        synchronizing: false,
 
         /* Job list */
         jobs: null,
@@ -105,11 +111,12 @@ export default new Vuex.Store({
             // If we acquire stats from the params, then parse them
             // into more easily usable parts
             let stats = user.stats;
-            if(!stats) return;
+            if(!stats) {
+                console.log("Stats were not updated");
+                return;
+            }
 
             this.commit('updateStats', Mixin.methods.parseStats(stats));
-            // I really dislike when I have to spam same word
-            // over and over again, but oh well
         },
         
         /**
@@ -124,6 +131,23 @@ export default new Vuex.Store({
          */
         updateJobList(state, jobs) {
             state.jobs = jobs;
+        },
+
+        /**
+         * Sets new values to stats
+         */
+        updateStatsValues(state, values) {
+            let value;
+            for(let property in values) {
+                value = values[property];
+
+                switch(property) {
+                    case "xp":
+                        // Level up?
+                    default: break;
+                }
+                state.stats[property].value = values[property];
+            }
         }
     },
     actions: {
@@ -144,8 +168,6 @@ export default new Vuex.Store({
                     password: this.state.input_password
                 })
                 .then(response => {
-					console.log(response);
-
                     // For safety measures, proceed only when we are sure that authentication
                     // on the backend happened smoothly      
                     if (response.status === 200) {
@@ -207,19 +229,37 @@ export default new Vuex.Store({
 		 * Usually used when loading saved session, reference: Entry at created()
 		 */
 		retrieveUserData() {
-			let cached = VueCookies.get('mafiozi.user-data');
-			if(cached) {
-				this.commit('updateUserInformation', cached);
-			}
+            if(!this.state.synchronizing) {
+                // Lock
+                this.state.synchronizing = true;
 
-			axios.get('api/auth/me').then(response => {
-				console.log(response);
-				if(response.status === 200) {
-					this.commit('updateUserInformation', response.data.user);
+                try {
+                    let cached = VueCookies.get('mafiozi.user-data');
+                    if(cached) {
+                        this.commit('updateUserInformation', cached);
+                    }
+                } catch (err) {
+                    VueCookies.remove('mafiozi.user-data');
+                    console.log("Cached user data discarded due to: causing errors");
+                }
 
-					VueCookies.set('mafiozi.user-data', response.data.user);
-				}
-			});
+                axios.get('api/auth/me').then(response => {
+                    if(response && response.status === 200) {
+                        this.commit('updateUserInformation', response.data.user);
+
+                        VueCookies.set('mafiozi.user-data', response.data.user);
+                    }
+                }).catch(err => {
+                    console.log("Error while synchronozing user data", err);
+                }).finally(_ => {
+
+                    // Unlock
+                    this.state.synchronizing = false;
+
+                });
+            } else {
+                console.log("Request already on its way!");
+            }
 		},
 
 
@@ -241,12 +281,12 @@ export default new Vuex.Store({
          * Perform signing out process. Will send request to backend and remove locally stored
          * access token, do nothing if no active token exists
          */
-        dropToken() {
+        dropToken(force = false) {
             // Make sure that we do have a token
 			this.commit('mute', true);
 			this.commit('updateUserInformation', {});
 
-            if (this.state.access_token !== null) {
+            if (this.state.access_token !== null && this.state.validating_token === false && !force) {
                 // Communicate with backend
                 axios.post('/api/auth/logout').then(_ => {
 
@@ -261,12 +301,19 @@ export default new Vuex.Store({
                         access_token: null
                     });
 
-                }).then(_ => {
+                }).finally(_ => {
                     VueCookies.remove('mafiozi.access_token');
 
                     this.commit('mute', false);
                 });
 
+            } else {
+                // Simply drop user data forcefully
+                this.commit("updateToken", {
+                    access_token: null
+                });
+                VueCookies.remove('mafiozi.access_token');
+                this.commit('mute', false);
             }
         },
 	
@@ -278,19 +325,28 @@ export default new Vuex.Store({
 			// Don't proceed if previous session doesn't exist
 			if(!Mixin.methods.tokenExists(this.state.access_token)) {
 				return;
-			}
+            }
+            
+            // Lock
+            this.state.validating_token = true;
 
 			// Ask backend if this token is still valid
 			axios.post('/api/auth/checkToken')
 			.then(response => {
-				if(response.data.success !== true) {
-					this.dispatch('dropToken');
-					console.log("Dropped previous session due to expired token");
-				}
+                // API will always return true in success field, if not
+                // token is invalid and logout
+                if(!response) {
+                    this.dispatch('dropToken');
+                }
 			}, err => {
+                // In case of any errors, logout as well
 				this.dispatch('dropToken');
-				console.log("Dropped previous session due to network or internal errors");
-			});
+			}).finally(_ => {
+
+                // Unlock
+                this.state.validating_token = false;
+
+            });
         },
 
 	},

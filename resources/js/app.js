@@ -11,6 +11,12 @@ window.Vue = require('vue');
 Vue.config.productionTip = false
 
 /**
+ * Countdown component
+ */
+import VueCountdown from '@chenfengyuan/vue-countdown';
+Vue.component(VueCountdown.name, VueCountdown);
+
+/**
  * Little cool library for prompt messages
  */
 import VueMessage from './libs/vue-message/src/lib/index.js';

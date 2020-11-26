@@ -76,9 +76,7 @@ export default {
                 // so we have the opportunity to save it properly, or at least try to
                 this.$cookies.remove('mafiozi.jobs');
                 console.log("Cached job list was discarded, due to being invalid");
-            } 
-
-            console.log(this.jobs);
+            }
 
             axios.get('api/job/all').then(response => {
                 this.jobs = response.data;

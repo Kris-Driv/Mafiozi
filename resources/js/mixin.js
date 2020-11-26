@@ -88,16 +88,22 @@ export default {
 
         parseStats: function(raw) {
             const stats = {};
-            raw.forEach(stat => {
-                stats[stat.type] = {
-                    value: stat.value,
-                    max: stat.max,
-                    growBy: stat.grow_by,
-                    delta: stat.delta_time,
-                    interval: stat.update_interval
-                }
-            });
+            
+            for(let key in raw) {
+                let stat = raw[key];
 
+                stats[stat.type] = {
+                    value: parseInt(stat.value),
+                    max: parseInt(stat.max),
+                    growBy: parseInt(stat.grow_by),
+                    delta: parseInt(stat.delta_time),
+                    interval: parseInt(stat.update_interval),
+                    type: stat.type,
+                    next_update: parseInt(stat.next_update),
+                    next_update_delta: parseInt(stat.next_update),
+                    local_next: (stat.next_update - Math.floor(Date.now() / 1000))
+                }
+            }
             return stats;
         },
 

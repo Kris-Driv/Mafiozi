@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ChatsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,4 +54,16 @@ Route::group([
     'prefix' => 'user'
 ], function($router) {
     Route::get('/top', [UserController::class, 'top']);
+});
+
+/**
+ * Chat group
+ */
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'chat'
+], function($router) {
+    Route::post('/fetch', [ChatsController::class, 'fetchMessages']);
+    Route::post('/send', [ChatsController::class, 'sendMessage']);
+    Route::delete('/delete', [ChatsController::class, 'deleteMessage']);
 });

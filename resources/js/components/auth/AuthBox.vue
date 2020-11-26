@@ -1,5 +1,6 @@
 <template>
     <div class="auth-wrapper">
+        <h3 class="title">Mafiozi</h3>
         <div class="auth-box">
             <header>
                 <div class="auth-box__response">
@@ -54,3 +55,21 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.auth-wrapper {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}
+.title {
+    font-family: 'Josefin Sans', 'Nunito', 'Roboto', sans-serif;
+    font-size: 4em;
+    font-weight: 100;
+    letter-spacing: 15px;
+    text-align: center;
+    text-shadow: 0 0 8px #fff;
+    margin-left: 15px; // Align due to font
+    margin-bottom: 15px;
+}
+</style>

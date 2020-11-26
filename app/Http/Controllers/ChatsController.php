@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Message;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Message;
 use App\Events\MessageSent;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 
 class ChatsController extends Controller
@@ -13,7 +14,7 @@ class ChatsController extends Controller
     
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -26,14 +27,8 @@ class ChatsController extends Controller
         return view('chat');
     }
 
-    /**
-     * Fetch all messages
-     *
-     * @return Message
-     */
-    public function fetchMessages()
-    {
-        return Message::with('user')->get();
+    public function fetchMessages(Request $request) : JsonResponse {
+        return response()->json(["messages" => Message::with('user')->get()->toArray()]);
     }
 
     /**
@@ -41,7 +36,7 @@ class ChatsController extends Controller
      *
      * @param  Request $request
      * @return Response
-     */
+    */
     public function sendMessage(Request $request)
     {
         $user = Auth::user();
@@ -52,7 +47,22 @@ class ChatsController extends Controller
 
         broadcast(new MessageSent($user, $message))->toOthers();
 
+        return ['success' => true];
+    }
+
+    /**
+     * Remove message from a database
+     *
+     * @param  Request $request
+     * @return Response
+     */
+    public function deleteMessage(Request $request)
+    {
+        // $user = Auth::user();
+        //
+
         return ['status' => '200 OK'];
     }
+
 
 }

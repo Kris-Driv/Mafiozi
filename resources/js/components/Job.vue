@@ -51,6 +51,16 @@ export default {
                             text: `Job completed! You've received payment +\$${rewards['money']}
                                 and +${rewards['xp']} XP`, style: 'success'
                         });
+
+                        this.$store.commit('updateStatsValues', {
+                            money: this.$store.state.stats.money.value + rewards['money'],
+                            xp: parseInt(this.$store.state.stats.xp.value) + parseInt(rewards['xp']),
+                            energy: this.$store.state.stats.energy.value - spent['energy']
+                        });
+                        
+                        // Try to synchronize
+                        this.$store.dispatch('retrieveUserData');
+
                     } else {
                         let message = response.data.message;
 

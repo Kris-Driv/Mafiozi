@@ -49,9 +49,9 @@ class JobsController extends Controller
         // Execute job
         $m = mt_rand($job->rm_min, $job->rm_max);
 
-        auth()->user()->getStat('money')->value += $m;
+        auth()->user()->giveMoney($m);
         auth()->user()->getStat('energy')->value -= $job->energy;
-        auth()->user()->getStat('xp')->value += $job->xp;
+        auth()->user()->addXp($job->xp);
         auth()->user()->push();
 
 

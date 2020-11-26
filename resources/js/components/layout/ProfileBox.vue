@@ -6,10 +6,6 @@
                 <div class="stats-level">{{ level }}</div>
             </div>
         </div>
-        <div class="profile-box__money">
-            <span class="symbol stat-indicator"><i class="fa fa-usd" aria-hidden="true"></i></span>
-            <span class="value">{{ money }}</span>
-        </div>
     </div>
 </template>
 
@@ -69,22 +65,6 @@ export default {
         color: $sidebar-background;
         background-color: #fff;
         font-family: 'Josef Sans', 'Nunito', 'Roboto', sans-serif;
-    }
-
-    &__money {
-        width: 90%;
-        border-bottom: 1px solid #fff;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        height: 32px;
-        margin: 0 auto;
-
-        .symbol {
-            float: left;
-        }
-        .value {
-            float: right;
-        }
     }
 }
 </style>

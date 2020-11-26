@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Validator;
 
+use App\Models\Stat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -29,10 +30,23 @@ class AuthController extends Controller
      */
     public function me(Request $request): JsonResponse
     {
+        $stats = [];
+        $hiddenFields = ['created_at', 'updated_at', 'user_id', 'last_updated'];
+
+        auth()->user()->updateValues();
+        $results = Stat::where('user_id', '=', auth()->user()->id)->get()->makeHidden($hiddenFields);
+
+        foreach($results as $stat) {
+            $stats[$stat->type] = array_merge([
+                "next_update" => $stat->getNextUpdate(),
+                "next_update_delta" => $stat->getNextUpdate(true)
+            ], $stat->toArray());
+        }
+
         return response()->json(
             ["user" => array_merge(
                 auth()->user()->toArray(),
-                ["stats" => auth()->user()->stats]
+                ["stats" => $stats]
             )]
         );
     }

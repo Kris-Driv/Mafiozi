@@ -6,7 +6,7 @@
 
             <div class="sidebar__info">
                 <ProfileBox />
-                <StatsList />
+                <StatsList v-if="$store.state.stats" :stats="$store.state.stats" />
             </div>
             
             <div class="sidebar__footer">
